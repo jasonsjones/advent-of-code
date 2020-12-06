@@ -107,7 +107,7 @@ function getValidPassports() {
         .filter((data) => validatePassportKeys(Object.keys(data)));
 }
 
-console.log("Advent of Code: Day 3");
+console.log("Advent of Code: Day 4");
 console.log("Part 1 -- valid passports: ", getNumOfValidPassports());
 console.log(
     "Part 2 -- passports with valid data: ",
