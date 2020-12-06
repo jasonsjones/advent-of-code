@@ -46,5 +46,61 @@ function getHigestSeatID() {
     return higestId;
 }
 
+function getNextSeatLocation(i, j) {
+    if (i === 127 && j === 7) {
+        return [127, 7];
+    }
+
+    if (j === 7 && i < 127) {
+        return [i + 1, 0];
+    }
+    return [i, j + 1];
+}
+
+function getPrevSeatLocation(i, j) {
+    if (i === 0 && j === 0) {
+        return [0, 0];
+    }
+    if (i === 0 && j < 8) {
+        return [i, j - 1];
+    }
+
+    if (j === 0 && i > 0) {
+        return [i - 1, 7];
+    }
+    return [i, j - 1];
+}
+
+function generateSeatingPlan() {
+    const plane = new Array(128).fill(0).map(() => new Array(8).fill(0));
+    rawInput.forEach((bp) => {
+        plane[getRow(bp)][getColumn(bp)] = "X";
+    });
+
+    return plane;
+}
+
+function findSeatId() {
+    let emptySeatId;
+    let foundSeat = false;
+    const seats = generateSeatingPlan();
+    for (let i = 0; i < 128; i++) {
+        if (foundSeat) break;
+        for (let j = 0; j < 8; j++) {
+            if (seats[i][j] === 0) {
+                emptySeatId = generateSeatID(i, j);
+                const [ni, nj] = getNextSeatLocation(i, j);
+                const [pi, pj] = getPrevSeatLocation(i, j);
+                if (seats[ni][nj] === "X" && seats[pi][pj] === "X") {
+                    foundSeat = true;
+                    break;
+                }
+            }
+        }
+    }
+    return emptySeatId;
+}
+
 console.log("Advent of Code: Day 5");
 console.log("Part 1 -- Highest seat ID: ", getHigestSeatID());
+console.log("Part 2 -- Find my seat: ", findSeatId());
